@@ -2,11 +2,11 @@ package com.proyectopulmonverde.userservice.Repository;
 
 import com.proyectopulmonverde.userservice.Entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
+//@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
-    User FindByEmail(String email);
-
-    Boolean existByEmail(String email);
-
+    Optional<User> findByEmail(String email);
 }
