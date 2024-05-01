@@ -5,7 +5,6 @@ import com.proyectopulmonverde.userservice.Repository.UserRepository;
 import com.proyectopulmonverde.userservice.Security.RegistrationRequest;
 import com.proyectopulmonverde.userservice.Service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,7 +26,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     public ResponseEntity<?> register(
             @RequestBody @Valid RegistrationRequest request
-    ) throws MessagingException {
+    ) {
         service.register(request);
         return ResponseEntity.accepted().build();
     }
@@ -38,7 +37,7 @@ public class AuthenticationController {
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with email: " + email);
         }
     }
 
@@ -53,12 +52,11 @@ public class AuthenticationController {
             existingUser.setFirstname(request.getFirstname());
             existingUser.setLastname(request.getLastname());
             userRepository.save(existingUser);
-            return ResponseEntity.ok("Usuario actualizado");
+            return ResponseEntity.ok("Actualizado");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El Email: " + email + " no se encuentra en nuestros registros");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email no encontrado " + email);
         }
     }
-
 
     @DeleteMapping("/user/{email}")
     public ResponseEntity<?> deleteUser(@PathVariable String email) {
@@ -67,7 +65,7 @@ public class AuthenticationController {
             userRepository.delete(user.get());
             return ResponseEntity.ok("Usuario borrado");
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No encontrado: " + email);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email no encontrado " + email);
         }
     }
 }
