@@ -11,13 +11,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableJpaAuditing
-//@EnableAsync
+@EnableAsync
 public class UserServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(UserServiceApplication.class, args);
     }
-
 
     @Bean
     public CommandLineRunner runner(RoleRepository roleRepository){
@@ -29,8 +28,4 @@ public class UserServiceApplication {
             }
         };
     }
-
-
-
-
 }
