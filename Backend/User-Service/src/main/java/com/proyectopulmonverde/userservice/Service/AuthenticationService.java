@@ -1,12 +1,19 @@
 package com.proyectopulmonverde.userservice.Service;
 
-import com.proyectopulmonverde.userservice.Security.RegistrationRequest;
 import com.proyectopulmonverde.userservice.Entities.Token;
 import com.proyectopulmonverde.userservice.Entities.User;
 import com.proyectopulmonverde.userservice.Repository.RoleRepository;
 import com.proyectopulmonverde.userservice.Repository.TokenRepository;
 import com.proyectopulmonverde.userservice.Repository.UserRepository;
+import com.proyectopulmonverde.userservice.Security.JwtService;
+import com.proyectopulmonverde.userservice.Security.RegistrationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +29,8 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
+    private final JwtService jwtService;
+    private final AuthenticationManager authenticationManager;
 
     public void register(RegistrationRequest request) {
         var userRole = roleRepository.findByName("USER")
@@ -32,14 +41,40 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .accountLocked(false)
-                .enable(false)
+                .enable(true)
                 .roles(List.of(userRole))
                 .build();
         userRepository.save(user);
         sendValidationEmail(user);
 
-
     }
+    public String authenticate(String email, String password) {
+        try {
+            System.out.println("Autenticando usuario: " + email);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, password)
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            System.out.println("Usuario autenticado con éxito: " + email);
+
+            User user = (User) authentication.getPrincipal();
+            String token = jwtService.generateToken(user);
+            System.out.println("Token generado: " + token);
+            return token;
+        } catch (AuthenticationException e) {
+            System.err.println("Error en la autenticación para el usuario: " + email);
+            e.printStackTrace();
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Error inesperado durante la autenticación o generación de token para el usuario: " + email);
+            e.printStackTrace();
+            throw new RuntimeException("Error interno del servidor", e);
+        }
+    }
+
+
+
 
     private void sendValidationEmail(User user) {
         var newToken = generateAndSaveActivationToken (user);

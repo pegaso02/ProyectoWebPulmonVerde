@@ -3,13 +3,16 @@ package com.proyectopulmonverde.userservice.Security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,6 +21,13 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
+
+    private SecretKey secretKey;
+    @PostConstruct
+    public void init() {
+        // Genera una clave segura con el algoritmo HS256
+        this.secretKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    }
 
 
     public String extractUsername(String token) {
@@ -32,7 +42,7 @@ public class JwtService {
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()
-                .setSigningKey(getSignInKey())
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
@@ -41,14 +51,14 @@ public class JwtService {
 
     @Value("9999")
     private long jwtExpiration;
-    @Value("AD86E21A77B57CC2982BB323D6459")
-    private String secretKey;
+   // @Value("AD86E21A77B57CC2982BB323D6459")
+   // private String secretKey;
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    private String generateToken(Map<String, Object> claims, UserDetails userDetails) {
+    public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
         return buildToken(claims, userDetails, jwtExpiration);
     }
 
@@ -68,7 +78,7 @@ public class JwtService {
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
                 .claim("authorities", authorities)
-                .signWith(getSignInKey())
+                .signWith(secretKey)
                 .compact()
                 ;
     }
@@ -87,8 +97,5 @@ public class JwtService {
     }
 
 
-    private Key getSignInKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
+
 }
