@@ -1,0 +1,30 @@
+.informacion{
+    display: flex;
+    justify-content: space-between;
+}
+
+.texto-informacion {
+    margin: 5%;
+    margin-left: 15%;
+    width: 40%;
+}
+
+.img-informacion {
+   margin: 5%;
+    margin-right: 25%;
+    width: 30%;
+} 
+
+#titulo{
+    color:  #34A853;
+}
+
+#button-mas{
+    width: 150px;
+    height: 35px;
+    border-radius: 50px;
+    background-color: #34A853;
+    border-style: none;
+}
+
+
