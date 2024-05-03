@@ -2,13 +2,16 @@ package com.proyectopulmonverde.userservice.Controller;
 
 import com.proyectopulmonverde.userservice.Entities.User;
 import com.proyectopulmonverde.userservice.Repository.UserRepository;
+import com.proyectopulmonverde.userservice.Security.LoginRequest;
 import com.proyectopulmonverde.userservice.Security.RegistrationRequest;
+
 import com.proyectopulmonverde.userservice.Service.AuthenticationService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -24,11 +27,20 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public ResponseEntity<?> register(
-            @RequestBody @Valid RegistrationRequest request
-    ) {
+    public ResponseEntity<?> register(@RequestBody @Valid RegistrationRequest request) {
         service.register(request);
         return ResponseEntity.accepted().build();
+    }
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            String token = service.authenticate(loginRequest.getEmail(), loginRequest.getPassword());
+            return ResponseEntity.ok().body(token);
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Autenticación fallida");
+        }
     }
 
     @GetMapping("/user/{email}")

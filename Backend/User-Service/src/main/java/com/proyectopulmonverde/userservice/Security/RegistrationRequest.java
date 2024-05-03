@@ -29,5 +29,7 @@ public class RegistrationRequest {
     @NotBlank(message = "Contraseña Obligatoria")
     @Size(min = 8, message = "Contraseña demasiado corta")
     private String password;
+    private String phone;
+
 
 }
