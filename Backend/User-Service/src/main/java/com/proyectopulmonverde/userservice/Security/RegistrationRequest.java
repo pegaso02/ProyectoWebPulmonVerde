@@ -1,6 +1,7 @@
 package com.proyectopulmonverde.userservice.Security;
 
 
+import com.proyectopulmonverde.userservice.Entities.Role;
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -30,6 +31,8 @@ public class RegistrationRequest {
     @Size(min = 8, message = "Contraseña demasiado corta")
     private String password;
     private String phone;
+
+    private Role role;
 
 
 }
