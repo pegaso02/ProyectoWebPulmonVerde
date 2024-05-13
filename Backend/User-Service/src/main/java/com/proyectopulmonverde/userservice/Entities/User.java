@@ -9,8 +9,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.nio.MappedByteBuffer;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "_user")
+@Table(name = "user")
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails, Principal {
 
@@ -50,8 +52,23 @@ public class User implements UserDetails, Principal {
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
 
-    //@Enumerated(EnumType.STRING)
-    //private Role role;
+    /*Relacion con articles*/
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "createdBy",
+            fetch = FetchType.LAZY
+    )
+    private List<Article> articles = new ArrayList<>();
+
+    /*Relacion con comments*/
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            mappedBy = "user"
+    )
+    private List<Comment> comments = new ArrayList<>();
+
+
+
 
     @Override
     public String getName(){
