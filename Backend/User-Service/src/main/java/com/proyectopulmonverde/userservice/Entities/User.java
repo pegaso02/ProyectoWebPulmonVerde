@@ -40,8 +40,11 @@ public class User implements UserDetails, Principal {
     private boolean accountLocked;
     private boolean enable;
 
+    /*
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
+
+     */
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -50,8 +53,8 @@ public class User implements UserDetails, Principal {
     @Column(insertable = false)
     private LocalDateTime lastModifiedDate;
 
-    //@Enumerated(EnumType.STRING)
-    //private Role role;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Override
     public String getName(){
@@ -60,10 +63,7 @@ public class User implements UserDetails, Principal {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles
-                .stream()
-                .map(r -> new SimpleGrantedAuthority(r.getName()))
-                .collect(Collectors.toList());
+        return role.getAuthorities();
     }
 
     @Override

@@ -49,7 +49,7 @@ public class JwtService {
                 ;
     }
 
-    @Value("9999")
+    @Value("86400000")
     private long jwtExpiration;
    // @Value("AD86E21A77B57CC2982BB323D6459")
    // private String secretKey;
