@@ -1,0 +1,98 @@
+.informacion{
+    display: flex;
+    justify-content: space-between;
+}
+
+.texto-informacion {
+    margin: 5%;
+    margin-left: 10%;
+    width: 40%;
+}
+
+.img-informacion {
+   margin: 5%;
+   margin-right: 10%;
+   width: 50%;   
+} 
+
+#img-inicio{
+ border-radius: 25px;
+}
+
+#titulo{
+    color:  hsl(136, 75%, 45%);
+}
+
+#button-mas{
+    width: 150px;
+    height: 35px;
+    border-radius: 50px;
+    background-color: hsl(136, 75%, 45%);
+    border-style: none;
+    color: azure;
+}
+
+.titulo-comunicados, .titulo-blogs{
+    text-align: center;
+}
+.comunicados, .blogs{
+    display: flex;
+    justify-content: space-between;
+}
+
+#img-comunicados{
+    width: 50%;
+    height: 50%;
+}
+
+.comunicado-uno, .comunicado-dos, .comunicado-tres{
+    margin: 5%;
+}
+
+.blog-uno, .blog-dos, .blog-tres{
+    margin: 5%;
+}
+
+#button-comunicados, #button-blogs{
+    width: 90px;
+    height: 35px;
+    border-radius: 10px;
+    color: hsl(136, 75%, 45%);
+    border-color: hsl(136, 75%, 45%);
+    border-style: double;
+}
+
+.img-fluid {
+ width: 80%; 
+ height: 70%;
+}
+
+.acciones{
+    text-align: center;
+}
+
+.participacion{
+    display: flex;
+    justify-content: space-between;
+}
+
+.texto-participacion {
+    margin: 5%;
+    margin-left: 10%;
+    width: 40%;
+}
+
+.img-participacion {
+   margin: 5%;
+   margin-right: 10%;
+   width: 50%;   
+} 
+
+#button-participación{
+    width: 90px;
+    height: 35px;
+    border-radius: 10px;
+    color: black;
+    background-color: yellow;
+    border-style: none;
+}
