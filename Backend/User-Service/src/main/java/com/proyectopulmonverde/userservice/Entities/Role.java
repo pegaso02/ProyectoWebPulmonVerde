@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import static com.proyectopulmonverde.userservice.Entities.Permission.*;
 
+
 @RequiredArgsConstructor
 public enum Role {
 

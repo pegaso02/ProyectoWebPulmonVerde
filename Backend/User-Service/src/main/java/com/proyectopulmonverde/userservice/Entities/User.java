@@ -9,11 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.nio.MappedByteBuffer;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -30,6 +32,7 @@ public class User implements UserDetails, Principal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String firstname;
     private String lastname;
     @Column(unique = true, nullable = false, length = 50)
@@ -40,11 +43,8 @@ public class User implements UserDetails, Principal {
     private boolean accountLocked;
     private boolean enable;
 
-    /*
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
-
-     */
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user") /*Propietario de la relacion "user"*/
+    private Set<Article> articles;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

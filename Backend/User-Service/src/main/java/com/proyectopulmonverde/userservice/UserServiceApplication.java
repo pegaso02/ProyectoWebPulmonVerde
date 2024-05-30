@@ -31,7 +31,7 @@ public class UserServiceApplication {
             var admin = RegistrationRequest.builder()
                     .firstname("Admin")
                     .lastname("Admin")
-                    .email("admin@gmail.com")
+                    .email("AdministradorNew@gmail.com")
                     .password("password123")
                     .role(ADMIN)
                     .build();

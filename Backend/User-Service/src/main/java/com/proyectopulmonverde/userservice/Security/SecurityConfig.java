@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -56,7 +57,17 @@ public class SecurityConfig {
                                 "/webjars/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-/*
+
+                                .anyRequest().authenticated()
+                                /*
+                              .requestMatchers( HttpMethod.POST,"/api/v1/articles/**").authenticated()// Permitir POST solo a usuarios autenticados en la ruta de articles
+                                .requestMatchers(HttpMethod.PUT,"/api/v1/articles/**").authenticated()
+                                .requestMatchers(HttpMethod.DELETE,"/api/v1/articles/**").authenticated()
+                                .requestMatchers(HttpMethod.GET,"/api/v1/articles/**").permitAll()
+                                */
+
+
+                                /*
                                 .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
 
                                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/**").hasAuthority(Permission.ADMIN_READ.getPermission())
@@ -66,7 +77,8 @@ public class SecurityConfig {
 
 
  */
-                                .anyRequest().authenticated()
+
+                               // .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider)
